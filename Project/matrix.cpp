@@ -4,114 +4,273 @@
 using namespace std;
 
 void performOperations(vector<vector<int>>, vector<vector<int>>, int, int);
+void acceptMatrix(vector<vector<int>> *, vector<vector<int>> *, int, int, int, bool flag = true);
+vector<vector<int>> performAddition(vector<vector<int>> *, vector<vector<int>> *, int, int, bool);
+vector<vector<int>> performMultiplication(vector<vector<int>> *, vector<vector<int>> *, int, int, int);
+void displayResult(vector<vector<int>> *, int, int);
 
 int main()
 {
-    int row, col;
-    cout << "Enter the row of the matrix: ";
-    cin >> row;
-    cout << "Enter the column of the matrix: ";
-    cin >> col;
-    vector<vector<int>> matrix1, matrix2;
-    for (int index = 1; index <= 2; index++)
-    {
-        cout << "\t\tEnter the elements of matrix" << index << endl;
-        string letter;
-        if (index == 1)
-            letter = "first";
-        else
-            letter = "second";
+    int choice;
+    cout << "\tWelcome to Matrix Operations.\n";
+    cout << "1. A + B\n";
+    cout << "2. A - B\n";
+    cout << "3. A * B\n";
+    cout << "Enter your choice: ";
+    cin >> choice;
 
-        for (int i = 0; i < row; i++)
-        {
-            vector<int> m;
-            cout << "Enter the " << (i + 1) << "th row of the " << letter << " matrix.\n";
-            for (int j = 0; j < col; j++)
-            {
-                int num;
-                cout << "Enter element #" << i << j << ": ";
-                cin >> num;
-                m.push_back(num);
-            }
-            if (index == 1)
-                matrix1.push_back(m);
-            else
-                matrix2.push_back(m);
-        }
+    while (choice > 3 || choice < 1)
+    {
+        cout << "Your choice must be between 1 - 3: ";
+        cin >> choice;
     }
 
-    performOperations(matrix1, matrix2, row, col);
+    int row, col;
+    vector<vector<int>> matrix1, matrix2;
+    if (choice == 1)
+    {
+        cout << "Enter the row of the matrices: ";
+        cin >> row;
+        cout << "Enter the column of the matirces: ";
+        cin >> col;
 
-    // for (int i = 0; i < row; i++)
-    // {
-    //     for (int j = 0; j < col; j++)
-    //     {
-    //         cout << matrix1[i][j] << " ";
-    //     }
-    //     cout << endl;
-    // }
-    // for (int i = 0; i < row; i++)
-    // {
-    //     for (int j = 0; j < col; j++)
-    //     {
-    //         cout << matrix2[i][j] << " ";
-    //     }
-    //     cout << endl;
-    // }
+        acceptMatrix(&matrix1, &matrix2, row, col,0);
+        vector<vector<int>> sum = performAddition(&matrix1, &matrix2, row, col, true);
+        displayResult(&sum, row, col);
+    }
+    else if (choice == 2)
+    {
+        cout << "Enter the row of the matrices: ";
+        cin >> row;
+        cout << "Enter the column of the matirces: ";
+        cin >> col;
+
+        acceptMatrix(&matrix1, &matrix2, row, col,0);
+        vector<vector<int>> sum = performAddition(&matrix1, &matrix2, row, col, false);
+        displayResult(&sum, row, col);
+    }
+    else
+    {
+        int row1, col1, row2, col2; // to holds the rows and columns of the two matrices.
+        cout << "Enter row of the first matrix: ";
+        cin >> row1;
+        cout << "Enter the column of the first matrix: ";
+        cin >> col1;
+        // row2 = col1; // since the column of the first matrix must be equall to the second matrix.
+        cout << "Enter the column of the second matrix: ";
+        cin >> col2;
+        acceptMatrix(&matrix1, &matrix2, row1, col1, col2, false);
+        vector<vector<int>> product = performMultiplication(&matrix1, &matrix2, row1, col1, col2);
+
+        displayResult(&product, row1, col2);
+    }
 }
 
 /**
- * This function will perform Addition, Subtraction and multiplication
- * on the two matrices.
+ * This function will accept the matrix elements.
  *
- * @param mat1 holds the address of the first matrix.
- * @param mat2 holds the address of the second matrix.
- * @param row holds the row of the matrices.
- * @param col holds the column of the matrices.
+ * @param mat1 holds the elements of matrix 1.
+ * @param mat2 holds the elements of matrix 2.
+ * @param i holds the row of the matrices.
+ * @param j holds the column of the matrices.
  */
-void performOperations(vector<vector<int>> mat1, vector<vector<int>> mat2, int row, int col)
+void acceptMatrix(vector<vector<int>> *mat1, vector<vector<int>> *mat2, int i, int j, int k, bool flag)
 {
-    for (int index = 1; index <= 2; index++)
+    if (flag == true)
     {
-        if (index == 1)
-            cout << "A + B:\n";
-        else
-            cout << "A - B:\n";
-        for (int i = 0; i < row; i++)
+        for (int index = 1; index <= 2; index++)
         {
-            for (int j = 0; j < col; j++)
+            cout << "\t\tEnter the elements of matrix" << index << endl;
+            string letter;
+            if (index == 1)
+                letter = "first";
+            else
+                letter = "second";
+
+            for (int r = 0; r < i; r++)
             {
+                vector<int> m;
+                cout << "Enter the " << (r + 1) << "th row of the " << letter << " matrix.\n";
+                for (int c = 0; c < j; c++)
+                {
+                    int num;
+                    cout << "Enter element #" << r << c << ": ";
+                    cin >> num;
+                    m.push_back(num);
+                }
                 if (index == 1)
-                    cout << mat1[i][j] + mat2[i][j] << " ";
+                    (*mat1).push_back(m);
                 else
-                    cout << mat1[i][j] - mat2[i][j] << " ";
+                    (*mat2).push_back(m);
             }
-            cout << endl;
         }
     }
-
-    vector<vector<int>> product;
-    for (int i = 0; i < row; i++)
-    {        
-        for (int j = 0; j < col; j++)
+    else
+    {
+        cout << "Enter elements of the first matrix:\n";
+        for (int r = 0; r < i; r++)
         {
-            vector<int> pro;
-            int num = 0;
-            for (int k = 0; k < col; k++)
-                num += mat1[i][k] * mat2[k][j];
+            cout << "Enter elements of " << (r + 1) << "th row:\n";
 
-            pro.push_back(num);
-            product.push_back(pro);
+            vector<int> m;
+            for (int c = 0; c < j; c++)
+            {
+                int num;
+                cout << "Enter " << r << c << " element: ";
+                cin >> num;
+                m.push_back(num);
+            }
+            (*mat1).push_back(m);
+        }
+        cout << "Enter elements of the second matrix:\n";
+        for (int r = 0; r < j; r++)
+        {
+            cout << "Enter elements of " << (r + 1) << "th row:\n";
+            vector<int> m;
+            for (int c = 0; c < k; c++)
+            {
+                int num;
+                cout << "Enter " << r << c << " element: ";
+                cin >> num;
+                m.push_back(num);
+            }
+            (*mat2).push_back(m);
         }
     }
+}
 
-    cout << "AB:\n";
+/**
+ * This function will perform matrix addition on two matrices.
+ *
+ * @param mat1 holds the elements of the first matrix.
+ * @param mat2 holds the elements of the seconde matrix/
+ * @param i holds the row of the matrices.
+ * @param j holds the column fo the matrices.
+ *
+ * @return the sum or difference of the two matrices.
+ */
+vector<vector<int>> performAddition(vector<vector<int>> *mat1, vector<vector<int>> *mat2, int i, int j, bool flag)
+{
+    vector<vector<int>> sum;
+    vector<int> s;
+
+    for (int r = 0; r < i; r++)
+    {
+        for (int c = 0; c < j; c++)
+        {
+            int n;
+            if (flag == true)
+                n = (*mat1)[r][c] + (*mat2)[r][c];
+            else
+                n = (*mat1)[r][c] - (*mat2)[r][c];
+            s.push_back(n);
+        }
+        sum.push_back(s);
+    }
+    return sum;
+}
+
+/**
+ * This function will perform vector multiplication on the two matrices.
+ *
+ * @param mat1 will hold the elements of the first matrix.
+ * @param mat2 will hold the elements of the second matrix.
+ * @param r1 holds the row of the first matrix.
+ * @param c1 holds the column of the first matrix.
+ * @param r2 holds the row of the second matrix.
+ * @param c2 holds the column of the second matrix.
+ *
+ * @return the vector product of the two matrices.
+ */
+vector<vector<int>> performMultiplication(vector<vector<int>> *mat1, vector<vector<int>> *mat2, int r1, int c1, int c2)
+{
+    vector<vector<int>> product;
+    for (int i = 0; i < r1; i++)
+    {
+        vector<int> pro;
+        for (int j = 0; j < c2; j++)
+        {
+            int num = 0;
+            for (int k = 0; k < c1; k++)
+            {
+                num += ((*mat1)[i][k] * (*mat2)[k][j]);
+            }
+            pro.push_back(num);
+        }
+        product.push_back(pro);
+    }
+    return product;
+}
+
+/**
+ * This function will display the result.
+ *
+ * @param matrix holds the elements of the result.
+ * @param row holds the row of the result matrix.
+ * @param col holds the column of the result matrix.
+ */
+void displayResult(vector<vector<int>> *matrix, int row, int col)
+{
     for (int i = 0; i < row; i++)
     {
         for (int j = 0; j < col; j++)
-        {
-            cout << product[i][j] << " ";
-        }
+            cout << (*matrix)[i][j] << " ";
         cout << endl;
     }
 }
+
+// /**
+//  * This function will perform Addition, Subtraction and multiplication
+//  * on the two matrices.
+//  *
+//  * @param mat1 holds the address of the first matrix.
+//  * @param mat2 holds the address of the second matrix.
+//  * @param row holds the row of the matrices.
+//  * @param col holds the column of the matrices.
+//  */
+// void performOperations(vector<vector<int>> mat1, vector<vector<int>> mat2, int row, int col)
+// {
+//     for (int index = 1; index <= 2; index++)
+//     {
+//         if (index == 1)
+//             cout << "A + B:\n";
+//         else
+//             cout << "A - B:\n";
+//         for (int i = 0; i < row; i++)
+//         {
+//             for (int j = 0; j < col; j++)
+//             {
+//                 if (index == 1)
+//                     cout << mat1[i][j] + mat2[i][j] << " ";
+//                 else
+//                     cout << mat1[i][j] - mat2[i][j] << " ";
+//             }
+//             cout << endl;
+//         }
+//     }
+
+//     vector<vector<int>> product;
+//     for (int i = 0; i < row; i++)
+//     {
+//         for (int j = 0; j < col; j++)
+//         {
+//             vector<int> pro;
+//             int num = 0;
+//             for (int k = 0; k < col; k++)
+//                 num += mat1[i][k] * mat2[k][j];
+
+//             pro.push_back(num);
+//             product.push_back(pro);
+//         }
+//     }
+
+//     cout << "AB:\n";
+//     for (int i = 0; i < row; i++)
+//     {
+//         for (int j = 0; j < col; j++)
+//         {
+//             cout << product[i][j] << " ";
+//         }
+//         cout << endl;
+//     }
+// }
