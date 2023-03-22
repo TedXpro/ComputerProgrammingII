@@ -50,3 +50,7 @@ Transaction Type: Withdraw, Account Number: 3, Amount: 10000, Time: Tue Mar 21 1
 
 Transaction Type: Deposit, Account Number: 1, Amount: 10000, Time: Tue Mar 21 18:46:02 2023
 
+Transaction Type: Withdraw, Account Number: 2, Amount: 1000, Time: Wed Mar 22 07:29:19 2023
+
+Transaction Type: Deposit, Account Number: 1, Amount: 1000, Time: Wed Mar 22 07:29:19 2023
+

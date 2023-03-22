@@ -33,7 +33,7 @@ string readCurrentTime();
 bool checkUser(string, string[]);
 void writeTransactionFile(string, Transaction, int);
 // bool login(int);
-void deposit(string, int);
+void deposit(string, int, bool flag = false);
 void withdraw(string);
 bool checkAmount(string, int);
 void debitMoney(string, int);
@@ -152,8 +152,8 @@ void admin()
 void addUser()
 {
     UserType user = USER;
-    string firstName, fathersName;
-    int accNum, password, balance;
+    string firstName, fathersName, line;
+    int password, balance;
     char ch;
 
     cout << "Enter the firstName: ";
@@ -174,8 +174,16 @@ void addUser()
     else
         ch = 'M';
 
-    cout << "Enter account number: ";
-    cin >> accNum;
+    ifstream readData("userFile.txt");
+    int accNum = 9999; // cross check if there is already a line in the user file.
+    vector<string> v;
+    while (getline(readData, line))
+    {
+        v = split(line, DELIMITTER);
+        accNum = stoi(v[1]);
+    }
+    accNum += 1;
+    readData.close();
 
     /*
     ************************************************
@@ -219,16 +227,15 @@ void addUser()
  */
 void deleteUser()
 {
-    string accNum;
-    int num;
-    cout << "How many accounts will you be deleting: ";
-    cin >> num;
-    while (num != 0)
+    string accNum, name[4];
+
+    string line;
+    vector<string> v;
+    cout << "Enter the account number to be deleted: ";
+    cin >> accNum;
+
+    if (checkUser(accNum,name))
     {
-        string line;
-        vector<string> v;
-        cout << "Enter the account number to be deleted: ";
-        cin >> accNum;
 
         ifstream readUserData("userFile.txt");       // to read data from the user file.
         ofstream writeTempData("temporaryFile.txt"); // to write data on the temporary file.
@@ -291,9 +298,11 @@ void deleteUser()
         readTData.close();
         writeAccFile.close();
 
-        cout << "Account number " << accNum << " has successfully been deleted!\n";
-        num--;
+        cout << "\nAccount number " << accNum << " has successfully been deleted!\n";
+        cout << "------------------------------------------------------\n";
     }
+    else
+        cout << "\nAccount number doesnt exist!\n";
 }
 
 /**
@@ -457,7 +466,7 @@ void writeTransactionFile(string accNo, Transaction trans, int amount)
  * @param accNo holds the account of the user.
  * @param amount holds the amount of money to be deposited.
  */
-void deposit(string accNo, int amount)
+void deposit(string accNo, int amount, bool flag)
 {
     int num;
     string line, str;
@@ -496,8 +505,11 @@ void deposit(string accNo, int amount)
 
         if (v[0] == accNo)
         {
-            cout << "The money has been deposited successfully.\n";
-            cout << "Your current balance is " << v[1] << endl;
+            if (flag == 0)
+            {
+                cout << "The money has been deposited successfully.\n";
+                cout << "Your current balance is " << v[1] << endl;
+            }
         }
         writeAccFile << line << endl;
     }
@@ -664,7 +676,8 @@ void debitMoney(string accNo, int amount)
             num = stoi(v[1]);
             num -= amount;
 
-            cout << amount << "\nBirr has succesfull been debited from your account.\n";
+            cout << "\n"
+                 << amount << "\nBirr has succesfull been debited from your account.\n";
             cout << "The amount of money left in your bank account is " << num << endl;
 
             v[1] = to_string(num);
@@ -688,7 +701,6 @@ void debitMoney(string accNo, int amount)
     }
     readTempFile.close();
     writeAccFile.close();
-    
 }
 
 /**
@@ -705,6 +717,14 @@ void transfer(string senderAccount)
     {
         cout << "Enter the account number of the reciever: ";
         cin >> recieverAccount;
+
+        if (recieverAccount == senderAccount)
+        {
+            cout << "\nYou have entered your own account!\n";
+            cout << "Please try again.\n";
+            cout << "-------------------------------------";
+            return;
+        }
 
         while (!checkUser(recieverAccount, name))
         {
@@ -731,7 +751,7 @@ void transfer(string senderAccount)
             cin >> money;
         }
 
-        cout << "\nReciever name: " << name[0]<< " " << name[2] << endl;
+        cout << "\nReciever name: " << name[0] << " " << name[2] << endl;
         cout << "Reciever account: " << recieverAccount << endl;
         cout << "Amount of Money: " << money << " Birr\n";
         cout << "Would you like to continue (Y/n): ";
@@ -748,7 +768,7 @@ void transfer(string senderAccount)
 
     cout << "\nTransfer Successful!";
     debitMoney(senderAccount, money); // to debit from the sender account.
-    deposit(recieverAccount, money);
+    deposit(recieverAccount, money, true);
     cout << "-----------------------------------------------------\n";
 }
 
