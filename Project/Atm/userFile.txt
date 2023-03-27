@@ -1,0 +1,4 @@
+1,10000,Yohannes,Belay,1111,M
+1,10001,Yodahe,Gossa,2222,M
+1,10002,Yoak,Moges,3333,M
+1,10003,Yigerem,Bisrat,4444,M

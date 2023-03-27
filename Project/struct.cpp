@@ -1,3 +1,10 @@
+/*      Name                ID
+1. Newal Yeman          UGR/9108/14
+2. Yigerem Bisrat       UGR//14
+3. Yodahe Gossa         UGR/9595/14
+4. Yoak Moges           UGR/3567/14
+5. Yohannes Belay       UGR/4223/14
+*/
 #include <iostream>
 
 using namespace std;

@@ -1,3 +1,10 @@
+/*      Name                ID
+1. Newal Yeman          UGR/9108/14
+2. Yigerem Bisrat       UGR/5026/14
+3. Yodahe Gossa         UGR/9595/14
+4. Yoak Moges           UGR/3567/14
+5. Yohannes Belay       UGR/4223/14
+*/
 #include <iostream>
 #include <cstring>
 #include <string>
@@ -43,9 +50,7 @@ vector<string> split(string, char DELIMITTER);
 
 int main()
 {
-    const int password = 1234;
     int choice; // holds the choice the user enters.
-
     do
     {
         // Creating menus:
@@ -69,19 +74,7 @@ int main()
         if (choice == 1)
             admin();
         else if (choice == 2)
-        {
             user();
-            // int pass;
-            // string userName, fatherName;
-            // cout << "Enter your Name: ";
-            // cin >> userName;
-            // cout << "Enter your Fathers Name: ";
-            // cin >> fatherName;
-            // /*
-            //     Authenticate
-            //     check for user
-            // */
-        }
     } while (choice != 3);
     cout << "Thank you for banking with us.\n";
     cout << "------------------------------\n";
@@ -93,6 +86,7 @@ int main()
  */
 void admin()
 {
+    const int PASSWORD = 1234;
     int pass;        // pass holds the password for the admin
     int adminChoice; // holds the choice the admin enters from the admin menu.
     cout << "Enter the Password: ";
@@ -101,7 +95,7 @@ void admin()
     // ifstream readData("userFile.txt");
     // // int num
     int counter = 1;
-    while (pass != 1234)
+    while (pass != PASSWORD)
     {
         if (counter >= 3)
         {
@@ -109,14 +103,12 @@ void admin()
             cout << "Thank You for using Our ATM\n";
             return;
         }
-
         cout << "The password you entered is not correct!\n";
-        cout << "Attempt " << counter << " /3\n";
+        cout << "Attempt " << counter << "/3\n";
         counter++;
         cout << "Please try again: ";
         cin >> pass;
     }
-
     do
     {
         cout << "\n\tWelcome to Admin Menu\n";
@@ -184,12 +176,6 @@ void addUser()
     }
     accNum += 1;
     readData.close();
-
-    /*
-    ************************************************
-    *   check account number if it exists or not   *
-    ************************************************
-    */
     cout << "Enter Password: ";
     cin >> password;
 
@@ -234,7 +220,7 @@ void deleteUser()
     cout << "Enter the account number to be deleted: ";
     cin >> accNum;
 
-    if (checkUser(accNum,name))
+    if (checkUser(accNum, name))
     {
 
         ifstream readUserData("userFile.txt");       // to read data from the user file.
@@ -246,11 +232,10 @@ void deleteUser()
             if (v[1] == accNum)
             {
                 string ch;
-                cout << "Are you sure you want to delete accout ";
+                cout << "Are you sure you want to delete Account ";
                 cout << "Number " << accNum << "?\n";
                 cout << "Press Q/q to return to main menu or any other key to continue: ";
                 cin >> ch;
-
                 if (ch == "Q" || ch == "q")
                     return;
                 continue;

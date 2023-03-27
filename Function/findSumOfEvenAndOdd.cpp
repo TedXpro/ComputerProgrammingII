@@ -1,24 +1,23 @@
-/*This program will accept as many numbers the 
-user enters and finds the sum of the odd and 
+/*This program will accept as many numbers the
+user enters and finds the sum of the odd and
 even numbers entered.*/
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
-vector<int> acceptNumbers();
-vector<int> separateEven(vector<int>);
-vector<int> separateOdd(vector<int>);
+vector<int> acceptNumbers(); 
+vector<int> separateEvenOrOdd(vector<int>, char);
 int findSum(vector<int>);
 void displayResult(vector<int>, vector<int>, vector<int>, int, int);
 
 int main()
 {
     vector<int> numbers, even, odd;
-    numbers = acceptNumbers();
-    
-    even = separateEven(numbers);
-    odd = separateOdd(numbers);
+    numbers = acceptNumbers();  // holds the numbers returned from the accept function.
+
+    even = separateEvenOrOdd(numbers, 'E');
+    odd = separateEvenOrOdd(numbers, 'O');
 
     int sumEven, sumOdd;
     sumEven = findSum(even);
@@ -30,19 +29,19 @@ int main()
 /**
  * This function will accpet numbers from the user and
  * returns the numbers in vector form.
- * 
+ *
  * @return the numbers in vector form.
-*/
+ */
 vector<int> acceptNumbers()
 {
     vector<int> nums;
     while (true)
     {
         int n;
-        cout << "Enter 0 to stop.\n";
+        cout << "Enter -1 to stop.\n";
         cout << "Enter number: ";
         cin >> n;
-        if (n == 0)
+        if (n == -1)
             break;
         else
             nums.push_back(n);
@@ -52,47 +51,42 @@ vector<int> acceptNumbers()
 
 /**
  * This function will separate even numbers.
- * 
+ *
  * @param nums holds the number entered by the user.
- * 
+ *
  * @return the vector that holds even numbers.
-*/
-vector<int> separateEven(vector<int> nums)
+ */
+vector<int> separateEvenOrOdd(vector<int> nums, char ch)
 {
-    vector<int> even;
-    for (int index = 0; index < nums.size(); index++)
+    vector<int> num;
+    if (ch == 'E')
     {
-        if (nums[index] % 2 == 0)
-            even.push_back(nums[index]);
+        for (int index = 0; index < nums.size(); index++)
+        {
+            if (nums[index] % 2 == 0)
+                num.push_back(nums[index]);
+        }
+        return num;
     }
-    return even;
-}
-
-/**
- * This function will separate odd numbers.
- * 
- * @param nums holds the number entered by the user.
- * 
- * @return the vector that holds odd numbers. 
-*/
-vector<int> separateOdd(vector<int> nums)
-{
-    vector<int> odd;
-    for (int index = 0; index < nums.size(); index++)
+    else if(ch == 'O')
     {
-        if (nums[index] % 2 != 0)
-            odd.push_back(nums[index]);
+        for (int index = 0; index < nums.size(); index++)
+        {
+            if (nums[index] % 2 != 0)
+                num.push_back(nums[index]);
+        }
+        return num;
     }
-    return odd;
+    return num;
 }
 
 /**
  * This function will find the total of the even or odd numbers.
- * 
+ *
  * @param evenOdd holds the even or odd number.
- * 
+ *
  * @return the total of the even or odd numbers.
-*/
+ */
 int findSum(vector<int> evenOdd)
 {
     int total = 0;
@@ -109,7 +103,7 @@ int findSum(vector<int> evenOdd)
  * @param even holds numbers that are even.
  * @param odd holds numbers that are odd.
  * @param sumE holds the sum of even numbers.
- * @param sumO holds the sum of odd numbers. 
+ * @param sumO holds the sum of odd numbers.
  */
 void displayResult(vector<int> nums, vector<int> even, vector<int> odd, int sumE, int sumO)
 {
